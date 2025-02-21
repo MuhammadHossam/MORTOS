@@ -17,13 +17,48 @@
  */
 
 #include <stdint.h>
+#include "stm32f446xx.h"
 
-#if !defined(__SOFT_FP__) && defined(__ARM_FP)
-  #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
-#endif
+#define SYSTEM_CORE_CLOCK_HZ                 ((uint32_t) 16000000u)
+#define SYS_TICK_RATE_HZ                     ((uint32_t) 1000u)
+/**
+ * @brief   thread1function
+ * @note
+ * @param   none
+ * @retval  none
+ */
+void thread1function(void)
+{
+  while(1)
+  {
+    for (int var = 0; var < 1000000; ++var)
+    {
+    }
+  }
+}
+/**
+ * @brief   thread2function
+ * @note
+ * @param   none
+ * @retval  none
+ */
+void thread2function(void)
+{
+
+  while(1)
+  {
+    for (int var = 0; var < 1000000; ++var)
+    {
+    }
+  }
+}
 
 int main(void)
 {
+	/* Configure and enable SysTick interrupts */
+	SysTick_Config(SYSTEM_CORE_CLOCK_HZ / SYS_TICK_RATE_HZ);
     /* Loop forever */
-	for(;;);
+  while(1){
+    /* Do nothing */
+  }
 }
