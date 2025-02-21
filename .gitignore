@@ -1,0 +1,47 @@
+# Ignore build output directories
+Debug/
+Release/
+build/
+
+# Ignore CubeIDE settings and generated files
+*.launch
+*.jmx
+*.log
+*.bak
+*.dep
+*.o
+*.d
+*.elf
+*.bin
+*.hex
+*.map
+*.srec
+*.lst
+*.out
+
+# Ignore Eclipse/STM32CubeIDE metadata
+.settings/
+.cproject
+.project
+.vscode/
+*.swp
+
+# Ignore automatically generated code (if CubeMX is used)
+Core/Inc/main.h
+Core/Src/main.c
+Core/Inc/stm32f4xx_it.h
+Core/Src/stm32f4xx_it.c
+Core/Inc/stm32f4xx_hal_conf.h
+Core/Src/stm32f4xx_hal_msp.c
+Core/Src/system_stm32f4xx.c
+Core/Inc/system_stm32f4xx.h
+
+# Ignore CubeMX config files (optional)
+*.ioc
+
+# Ignore personal files
+*.zip
+*.tar
+*.7z
+*.bak
+*.log
