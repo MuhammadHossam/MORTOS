@@ -21,37 +21,7 @@
 
 #define SYSTEM_CORE_CLOCK_HZ                 ((uint32_t) 16000000u)
 #define SYS_TICK_RATE_HZ                     ((uint32_t) 1000u)
-/**
- * @brief   thread1function
- * @note
- * @param   none
- * @retval  none
- */
-void thread1function(void)
-{
-  while(1)
-  {
-    for (int var = 0; var < 1000000; ++var)
-    {
-    }
-  }
-}
-/**
- * @brief   thread2function
- * @note
- * @param   none
- * @retval  none
- */
-void thread2function(void)
-{
 
-  while(1)
-  {
-    for (int var = 0; var < 1000000; ++var)
-    {
-    }
-  }
-}
 
 int main(void)
 {
