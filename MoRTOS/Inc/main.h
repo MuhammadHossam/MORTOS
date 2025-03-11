@@ -7,7 +7,7 @@
 
 #ifndef MAIN_H_
 #define MAIN_H_
-
-
-
+#include <stdint.h>
+void FunctionTest(uint32_t * svc_args);
+uint32_t svcEXEReturn;
 #endif /* MAIN_H_ */

@@ -29,7 +29,7 @@
 
 .global g_pfnVectors
 .global Default_Handler
-
+.global SVC_Handler
 /* start address for the initialization values of the .data section.
 defined in linker script */
 .word _sidata
@@ -59,9 +59,9 @@ Reset_Handler:
   mov   sp, r0          /* set stack pointer */
 /* Call the clock system initialization function.*/
   bl  SystemInit
-
+  svc #1
 /* Copy the data segment initializers from flash to SRAM */
-  ldr r0, =_sdata
+	  ldr r0, =_sdata
   ldr r1, =_edata
   ldr r2, =_sidata
   movs r3, #0
@@ -101,6 +101,21 @@ LoopForever:
 
   .size Reset_Handler, .-Reset_Handler
 
+
+ .section .text.SVC_Handler
+ .type SVC_Handler, %function
+ SVC_Handler:
+  tst lr, #0x04
+  ite eq
+  mrseq r0, msp
+  mrsne r0, psp
+  ldr r1, =svcEXEReturn
+  str lr, [r1]
+  bl FunctionTest
+  ldr r1, =svcEXEReturn
+  ldr lr,[r1]
+  bx lr
+
 /**
  * @brief  This is the code that gets called when the processor receives an
  *         unexpected interrupt.  This simply enters an infinite loop, preserving
@@ -114,6 +129,9 @@ Default_Handler:
 Infinite_Loop:
   b Infinite_Loop
   .size Default_Handler, .-Default_Handler
+
+
+
 
 /******************************************************************************
 *
@@ -264,8 +282,6 @@ g_pfnVectors:
 	.weak	UsageFault_Handler
 	.thumb_set UsageFault_Handler,Default_Handler
 
-	.weak	SVC_Handler
-	.thumb_set SVC_Handler,Default_Handler
 
 	.weak	DebugMon_Handler
 	.thumb_set DebugMon_Handler,Default_Handler

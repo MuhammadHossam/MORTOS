@@ -22,7 +22,10 @@
 #define SYSTEM_CORE_CLOCK_HZ                 ((uint32_t) 16000000u)
 #define SYS_TICK_RATE_HZ                     ((uint32_t) 1000u)
 
-
+void FunctionTest(uint32_t * svc_args)
+{
+	uint32_t x = svc_args[2];
+}
 int main(void)
 {
 	/* Configure and enable SysTick interrupts */
