@@ -19,7 +19,7 @@
 extern "C" {
 #endif
 
-/* Includes */
+#include <stdint.h>
 
 /**
  * @defgroup RTOS_Configuration_exported_defines
@@ -71,6 +71,15 @@ extern "C" {
 
 /**
  * @defgroup RTOS_Configuration_exported_typedefs
+ * @{
+ */
+
+/**
+ * @}
+ */
+
+/**
+ * @defgroup RTOS_Configuration_exported_variables
  * @{
  */
 
