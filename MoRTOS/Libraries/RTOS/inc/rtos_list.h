@@ -55,13 +55,13 @@
  * @brief Structure representing a list item.
  */
 struct listItem_t {
-  struct listItem_t *next; /**< Pointer to the next list item. */
-  struct listItem_t *prev; /**< Pointer to the previous list item. */
+  struct listItem_t *pNext; /**< Pointer to the next list item. */
+  struct listItem_t *pPrev; /**< Pointer to the previous list item. */
   void *pThread; /**< Pointer to the thread associated with the list item. */
   void *pList;   /**< Pointer to the list containing the list item. */
 };
 
-typedef listItem_t rtos_listItem_t;
+typedef struct listItem_t rtos_listItem_t;
 
 /**
  * @brief Structure representing the end of a list.
@@ -94,7 +94,9 @@ typedef struct {
  * @brief Function prototypes for RTOS list management.
  * @{
  */
-
+void rtos_listInit(rtos_list_t *pList);
+void rtos_listInsert(rtos_list_t *pList, rtos_listItem_t *pNewItem);
+void rtos_listRemove(rtos_listItem_t *pRemovedItem);
 /** @} */ // End of RTOS_List_exported_Functions group
 
 #endif // RTOS_LIST_H
