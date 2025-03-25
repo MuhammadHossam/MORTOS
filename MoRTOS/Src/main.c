@@ -18,15 +18,22 @@
 
 #include <stdint.h>
 #include "stm32f446xx.h"
+#include "rtos_list.h"
+#include "rtos_thread.h"
 
-#define SYSTEM_CORE_CLOCK_HZ                 ((uint32_t) 16000000u)
-#define SYS_TICK_RATE_HZ                     ((uint32_t) 1000u)
 
+rtos_thread_t thread1;
+rtos_stack_t stack1;
+void threadmain1(void){
+	uint32_t i = 0;
+	i++;
+}
 
 int main(void)
 {
 	/* Configure and enable SysTick interrupts */
-	SysTick_Config(SYSTEM_CORE_CLOCK_HZ / SYS_TICK_RATE_HZ);
+	SysTick_Config(SYSTEM_CORE_CLOCK_HZ / SYSTEM_TICK_RATE_HZ);
+	rtos_threadCreate(&thread1, &stack1, 1, threadmain1);
     /* Loop forever */
   while(1){
     /* Do nothing */

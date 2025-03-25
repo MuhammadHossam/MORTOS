@@ -20,6 +20,8 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include <stddef.h>
+#include "cmsis_gcc.h"
 
 /**
  * @defgroup RTOS_Configuration_exported_defines
@@ -41,6 +43,10 @@ extern "C" {
  * and it is recommended for fast context switching.
  */
 #define THREAD_STACK_SIZE ((uint32_t)1024u)
+/* 18 registers in the stack frame 
+    (R0 -> R15 not including R13(SP), xPSR), Control Register, and EXC Return*/
+#define THREAD_STACK_FRAME ((uint32_t)18u) 
+
 
 /**
  * @}

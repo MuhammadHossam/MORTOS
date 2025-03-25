@@ -83,7 +83,7 @@ typedef struct {
  * @brief Function declarations for thread management.
  * @{
  */
-
+void rtos_threadCreate(rtos_thread_t * pthread, rtos_stack_t * pstack, uint32_t priority, void (*pfunc)(void));
 /** @} */ // End of RTOS_Thread_Functions group
 
 #ifdef __cplusplus
