@@ -84,6 +84,7 @@ typedef struct {
  * @{
  */
 void rtos_threadCreate(rtos_thread_t * pthread, rtos_stack_t * pstack, uint32_t priority, void (*pfunc)(void));
+rtos_thread_t * rtos_threadGetNext(void);
 /** @} */ // End of RTOS_Thread_Functions group
 
 #ifdef __cplusplus

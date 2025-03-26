@@ -128,6 +128,21 @@ void rtos_threadListsInit(void) {
   }
 }
 
+/**
+ * @brief Creates a new thread and prepares it for execution.
+ *
+ * This function initializes a thread with the given stack, priority, and entry function.
+ * It sets up the stack frame for the thread, including program status register (xPSR),
+ * program counter, and control register. The thread is then inserted into the ready list
+ * based on its priority. If the new thread has a higher priority than the currently running 
+ * thread, a context switch is triggered.
+ *
+ * @param pthread Pointer to the thread structure to be initialized.
+ * @param pstack Pointer to the stack structure for the thread.
+ * @param priority Priority level assigned to the thread.
+ * @param pfunc Function pointer to the thread's entry function.
+ */
+
 void rtos_threadCreate(rtos_thread_t * pthread, rtos_stack_t * pstack, uint32_t priority, void (*pfunc)(void)) {
     ASSERT(pthread != NULL); // Check if the thread pointer is not NULL
     ASSERT(pstack != NULL); // Check if the stack pointer is not NULL
@@ -166,5 +181,19 @@ void rtos_threadCreate(rtos_thread_t * pthread, rtos_stack_t * pstack, uint32_t 
     }
 }
 
+
+/**
+ * @brief Retrieves the next thread to be executed based on the highest priority.
+ *
+ * This function returns a pointer to the thread control block of the next
+ * thread that should be executed. It selects the thread from the ready list
+ * that corresponds to the current highest priority level.
+ *
+ * @return Pointer to the thread control block of the next scheduled thread.
+ */
+
+rtos_thread_t * rtos_threadGetNext(void) {
+    return (rtos_thread_t *)readylist[currentTopPriority].pHead->pThread;
+}
 
  /** @} */
