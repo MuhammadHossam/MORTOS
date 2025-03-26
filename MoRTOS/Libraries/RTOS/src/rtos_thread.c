@@ -19,6 +19,7 @@
 
 
  // Includes
+#include "stm32f4xx.h"
 #include "rtos_thread.h"
 #include "rtos_cfg.h"
 #include "rtos_list.h"
@@ -149,6 +150,20 @@ void rtos_threadCreate(rtos_thread_t * pthread, rtos_stack_t * pstack, uint32_t 
 
     /*Link the item thread with the created thread.*/
     pthread->item.pThread =(void*) pthread;
+
+    rtos_listInsert(&readylist[priority], &pthread->item); // Insert the thread into the ready list
+    if(priority < currentTopPriority) {
+        currentTopPriority = priority; // Update the current top priority
+    }
+
+    if((pRunningThread != NULL) && ( priority < pRunningThread->priority)) {
+        /*If the created thread has higher priority than the running thread, perform a context switch*/
+        SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk; // Set the PendSV exception
+    }
+    else
+    {
+        /*Context switching isn't needed*/
+    }
 }
 
 
