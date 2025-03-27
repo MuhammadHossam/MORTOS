@@ -2,8 +2,8 @@
  * @file rtos_list.c
  * @brief Implementation of RTOS list utilities.
  * 
- * @author [Your Name]
- * @date [Date]
+ * @author Mohamed HossamElDin
+ * @date 20 March 2025
  */
 
 // -----------------------------------------------------------------------------

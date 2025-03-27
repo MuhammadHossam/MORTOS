@@ -70,7 +70,7 @@
  * @brief Function prototypes for RTOS core.
  * @{
  */
-
+void rtos_init(void);
 /** @} */ // End of RTOS_exported_Functions group
 
 #endif // RTOS_LIST_H

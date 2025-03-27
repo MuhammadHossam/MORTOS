@@ -137,10 +137,10 @@ g_pfnVectors:
   .word	0
   .word	0
   .word	0
-  .word	SVC_Handler
+  .word	RTOS_SVC_Handler
   .word	DebugMon_Handler
   .word	0
-  .word	PendSV_Handler
+  .word	RTOS_PendSV_Handler
   .word	SysTick_Handler
   .word	WWDG_IRQHandler              			/* Window Watchdog interrupt                                          */
   .word	PVD_IRQHandler               			/* PVD through EXTI line detection interrupt                          */
@@ -264,14 +264,14 @@ g_pfnVectors:
 	.weak	UsageFault_Handler
 	.thumb_set UsageFault_Handler,Default_Handler
 
-	.weak	SVC_Handler
-	.thumb_set SVC_Handler,Default_Handler
+	.weak	RTOS_SVC_Handler
+	.thumb_set RTOS_SVC_Handler,Default_Handler
 
 	.weak	DebugMon_Handler
 	.thumb_set DebugMon_Handler,Default_Handler
 
-	.weak	PendSV_Handler
-	.thumb_set PendSV_Handler,Default_Handler
+	.weak	RTOS_PendSV_Handler
+	.thumb_set RTOS_PendSV_Handler,Default_Handler
 
 	.weak	SysTick_Handler
 	.thumb_set SysTick_Handler,Default_Handler

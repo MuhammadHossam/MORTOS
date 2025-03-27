@@ -1,0 +1,122 @@
+/**
+ * @file rtos.c
+ * @brief Implementation of the Real-Time Operating System (RTOS) core functionalities.
+ * 
+ * This file contains the core logic and functions for the RTOS, including task management,
+ * scheduling, and inter-task communication.
+ * 
+ * @author Mohamed HossamElDin
+ * @date 26 March 2025
+ */
+
+/** @defgroup RTOS_Core RTOS Core
+ *  @brief Core functionalities of the RTOS.
+ *  @{
+ */
+
+/** @defgroup RTOS_Includes Includes
+ *  @brief Header files included in the RTOS implementation.
+ *  @{
+ */
+
+ #include "rtos.h"
+ #include "rtos_thread.h"
+ #include "rtos_cfg.h"
+ #include "stm32f446xx.h"
+/** @} */ // End of RTOS_Includes
+
+/** @defgroup RTOS_Typedefs Typedefs
+ *  @brief Typedefs used in the RTOS.
+ *  @{
+ */
+
+/** @} */ // End of RTOS_Typedefs
+
+/** @defgroup RTOS_Private_Macros Private Macros
+ *  @brief Private macros used internally by the RTOS.
+ *  @{
+ */
+
+ /** @} */ // End of RTOS_Private_Macros
+
+/** @defgroup RTOS_Private_Constants Private Constants
+ *  @brief Private constants used internally by the RTOS.
+ *  @{
+ */
+
+ /** @} */ // End of RTOS_Private_Constants
+
+/** @defgroup RTOS_Private_Variables Private Variables
+ *  @brief Private variables used internally by the RTOS.
+ *  @{
+ */
+
+ /** @} */ // End of RTOS_Private_Variables
+
+/** @defgroup RTOS_Private_Functions Private Functions
+ *  @brief Private functions used internally by the RTOS.
+ *  @{
+ */
+
+ /** @} */ // End of RTOS_Private_Functions
+
+/** @defgroup RTOS_Private_Implementations Private Implementations
+ *  @brief Private implementations of RTOS functionalities.
+ *  @{
+ */
+
+ /** @} */ // End of RTOS_Private_Implementations
+
+/** @defgroup RTOS_Extern_Functions Extern Functions
+ *  @brief Externally accessible functions provided by the RTOS.
+ *  @{
+ */
+
+/**
+ * @brief Initializes the RTOS core.
+ *
+ * This function initializes the RTOS core by configuring the NVIC and the
+ * SysTick timer. It also initializes the thread lists and enables the PendSV
+ * and SVC interrupts.
+ *
+ * @note This function must be called before any other RTOS functions are
+ *       called.
+ *
+ * @pre The function must be called before any other RTOS functions are
+ *      called.
+ *
+ * @post The RTOS core is initialized and ready to use.
+ */
+ void rtos_init(void){
+    __disable_irq(); // Disable interrupts by disable all maskable interrupts except NMI and HardFault
+    
+    /*Enable the double word alignment to comply with the AAPCS ARM architecture call procedure*/
+    SCB->CCR |= SCB_CCR_STKALIGN_Msk; 
+    
+    /*Configure the systick timer to 1ms*/
+    SysTick_Config(SYSTEM_CORE_CLOCK_HZ / SYSTEM_TICK_RATE_HZ);
+
+    /* Set priority group to 3
+    * bits[3:0] are the sub-priority,
+    * bits[7:4] are the preempt priority (0-15) */
+    NVIC_SetPriorityGrouping(3);
+
+    NVIC_SetPriority(SVCall_IRQn, 0); // Set the priority of the SVC call
+    NVIC_SetPriority(PendSV_IRQn, 0xFF); // Set the priority of the PendSV to the lowest priority in the system
+    NVIC_SetPriority(SysTick_IRQn, 1); // Set the priority of the SysTick to the lowest priority in the system
+
+    NVIC_EnableIRQ(SVCall_IRQn); // Enable the SVC call interrupt
+    NVIC_EnableIRQ(PendSV_IRQn); // Enable the PendSV interrupt
+
+    /*Mask all interrupts with priority >= 1 which means only SVC is permitted to be serviced*/
+    __set_BASEPRI(1); 
+
+    rtos_threadListsInit(); // Initialize the thread lists
+
+    __enable_irq(); // Enable interrupts and will not overwrite the BASEPRI
+ }
+/** @} */ // End of RTOS_Extern_Functions
+
+/** @} */ // End of RTOS_Core
+
+
