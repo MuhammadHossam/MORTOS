@@ -120,6 +120,34 @@ uint32_t exc_return_temp = 0xfffffff9;
     __enable_irq(); // Enable interrupts and will not overwrite the BASEPRI
  }
 
+ 
+/**
+ * @brief Start the RTOS scheduler.
+ *
+ * This function is used to start the RTOS scheduler. The scheduler is responsible
+ * for scheduling threads and performing context switching. The scheduler is
+ * started by calling this function after the RTOS initialization.
+ *
+ * @pre The function must be called after the RTOS initialization.
+ *
+ * @post The RTOS scheduler is started and ready to schedule threads.
+ */
+ void rtos_start_scheduler(void){
+    
+ }
+ 
+/**
+ * @brief The main SVC handler function for the RTOS.
+ *
+ * This function is the entry point for all SVC calls. It is responsible for
+ * handling the SVC calls and calling the appropriate functions.
+ *
+ * @param svc_args The arguments passed to the SVC call.
+ *
+ * @pre The function must be called through an SVC call.
+ *
+ * @post The appropriate function is called based on the SVC number.
+ */
 void rtos_svc_handler_main(uint32_t *svc_args){
    uint8_t svc_number = ((uint8_t *) svc_args[6])[-2];
 
@@ -128,6 +156,7 @@ void rtos_svc_handler_main(uint32_t *svc_args){
          rtos_threadCreate((rtos_thread_t *) svc_args[0], (rtos_stack_t *) svc_args[1], (uint32_t) svc_args[2], (void (*)(void)) svc_args[3]);
          break;
       case RTOS_START_SCHEDULER:
+         rtos_start_scheduler();
          break;
       default:
          ASSERT(0); // Invalid SVC call
