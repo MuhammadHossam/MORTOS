@@ -55,6 +55,7 @@
  *  @note This value is used to return to the thread mode using the PSP.
 */
 uint32_t exc_return_temp = 0xfffffff9;
+static volatile uint32_t sysTickCounter = 0;
  /** @} */ // End of RTOS_Private_Variables
 
 /** @defgroup RTOS_Private_Functions Private Functions
@@ -162,6 +163,16 @@ void rtos_svc_handler_main(uint32_t *svc_args){
          ASSERT(0); // Invalid SVC call
          break;
    }
+}
+
+volatile int32_t i = 0;
+void RTOS_SysTick_Handler(void)
+{
+   /*Set the PendSV to pending state to start context switching.*/
+   SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk; 
+   
+   /*Increment systick counter*/
+	++sysTickCounter;
 }
 /** @} */ // End of RTOS_Extern_Functions
 
