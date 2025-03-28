@@ -71,6 +71,7 @@
  * @{
  */
 void rtos_init(void);
+void rtos_svc_handler_main(uint32_t *svc_args);
 /** @} */ // End of RTOS_exported_Functions group
 
 #endif // RTOS_LIST_H

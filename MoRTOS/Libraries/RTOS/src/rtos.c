@@ -51,6 +51,10 @@
  *  @{
  */
 
+/** @brief Exception return value. 
+ *  @note This value is used to return to the thread mode using the PSP.
+*/
+uint32_t exc_return_temp = 0xfffffff9;
  /** @} */ // End of RTOS_Private_Variables
 
 /** @defgroup RTOS_Private_Functions Private Functions
@@ -115,6 +119,10 @@
 
     __enable_irq(); // Enable interrupts and will not overwrite the BASEPRI
  }
+
+void rtos_svc_handler_main(uint32_t *svc_args){
+   uint8_t svc_number = ((uint8_t *) svc_args[6])[-2];
+}
 /** @} */ // End of RTOS_Extern_Functions
 
 /** @} */ // End of RTOS_Core
