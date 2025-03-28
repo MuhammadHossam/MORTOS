@@ -129,6 +129,9 @@ void rtos_svc_handler_main(uint32_t *svc_args){
          break;
       case RTOS_START_SCHEDULER:
          break;
+      default:
+         ASSERT(0); // Invalid SVC call
+         break;
    }
 }
 /** @} */ // End of RTOS_Extern_Functions
