@@ -47,6 +47,9 @@ extern "C" {
     (R0 -> R15 not including R13(SP), xPSR), Control Register, and EXC Return*/
 #define THREAD_STACK_FRAME ((uint32_t)18u) 
 
+/** @brief RTOS commands */
+#define RTOS_START_SCHEDULER   0x00  /**< Start the RTOS scheduler */
+#define RTOS_CREATE_TASK       0x01  /**< Create a new task */
 
 /**
  * @}

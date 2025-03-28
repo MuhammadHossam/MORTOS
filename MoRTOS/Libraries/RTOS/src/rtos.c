@@ -122,6 +122,14 @@ uint32_t exc_return_temp = 0xfffffff9;
 
 void rtos_svc_handler_main(uint32_t *svc_args){
    uint8_t svc_number = ((uint8_t *) svc_args[6])[-2];
+
+   switch(svc_number){
+      case RTOS_CREATE_TASK:
+         rtos_threadCreate((rtos_thread_t *) svc_args[0], (rtos_stack_t *) svc_args[1], (uint32_t) svc_args[2], (void (*)(void)) svc_args[3]);
+         break;
+      case RTOS_START_SCHEDULER:
+         break;
+   }
 }
 /** @} */ // End of RTOS_Extern_Functions
 
