@@ -73,9 +73,11 @@
  * @{
  */
 
-
 static rtos_list_t readylist[THREAD_PRIORITY_LEVELS]; /**< Array of ready lists. */
 static uint32_t currentTopPriority = (uint32_t)(THREAD_PRIORITY_LEVELS - 1u); /**< Current top priority. */
+rtos_thread_t *pRunningThread; /**< Pointer to the currently running thread. */
+static uint32_t RunningThreadId = 0u; /**< Running thread Id */
+static uint32_t numOfThreads = 0u; /**< Total number of created threads */
 /** @} */
 
 
@@ -87,7 +89,6 @@ static uint32_t currentTopPriority = (uint32_t)(THREAD_PRIORITY_LEVELS - 1u); /*
  * @brief Variables can be externed for external usage.
  * @{
  */
-rtos_thread_t *pRunningThread; /**< Pointer to the currently running thread. */
 
 
 // -----------------------------------------------------------------------------
@@ -166,19 +167,10 @@ void rtos_threadCreate(rtos_thread_t * pthread, rtos_stack_t * pstack, uint32_t 
     /*Link the item thread with the created thread.*/
     pthread->item.pThread =(void*) pthread;
 
-    rtos_listInsert(&readylist[priority], &pthread->item); // Insert the thread into the ready list
-    if(priority < currentTopPriority) {
-        currentTopPriority = priority; // Update the current top priority
-    }
+    /*Increment the total number of threads and assign it to the thread id indicating the creation order*/
+    pthread->threadId = ++numOfThreads; 
 
-    if((pRunningThread != NULL) && ( priority < pRunningThread->priority)) {
-        /*If the created thread has higher priority than the running thread, perform a context switch*/
-        SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk; // Set the PendSV exception
-    }
-    else
-    {
-        /*Context switching isn't needed*/
-    }
+    
 }
 
 
@@ -196,4 +188,22 @@ rtos_thread_t * rtos_threadGetNext(void) {
     return (rtos_thread_t *)readylist[currentTopPriority].pHead->pThread;
 }
 
+
+void rtos_addThreadToReadyList(rtos_thread_t * pthread)
+{
+    ASSERT(pthread != NULL);
+    rtos_listInsert(&readylist[pthread->priority], &pthread->item); // Insert the thread into the ready list
+    if(pthread->priority < currentTopPriority) {
+        currentTopPriority = pthread->priority; // Update the current top priority
+    }
+
+    if((pRunningThread != NULL) && ( pthread->priority < pRunningThread->priority)) {
+        /*If the created thread has higher priority than the running thread, perform a context switch*/
+        SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk; // Set the PendSV exception
+    }
+    else
+    {
+        /*Context switching isn't needed*/
+    }
+}
  /** @} */

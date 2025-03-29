@@ -54,7 +54,7 @@
 /** @brief Exception return value. 
  *  @note This value is used to return to the thread mode using the PSP.
 */
-uint32_t exc_return_temp = 0xfffffff9;
+uint32_t exc_return_temp = 0u;
 static volatile uint32_t sysTickCounter = 0;
  /** @} */ // End of RTOS_Private_Variables
 

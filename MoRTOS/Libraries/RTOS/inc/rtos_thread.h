@@ -70,6 +70,7 @@ extern "C" {
 typedef struct thread_t {
   uint32_t pStack;      /**< Pointer to the thread's stack. */
   uint32_t priority;    /**< Thread priority. */
+  uint32_t threadId;    /**< Thread ID.*/
   rtos_listItem_t item; /**< List item for the thread. */
 } rtos_thread_t;
 
@@ -87,6 +88,7 @@ void rtos_threadListsInit(void);
 void rtos_threadCreate(rtos_thread_t * pthread, rtos_stack_t * pstack, uint32_t priority, void (*pfunc)(void));
 rtos_thread_t * rtos_threadGetNext(void);
 void rtos_svc_threadCreate(rtos_thread_t * pthread, rtos_stack_t * pstack, uint32_t priority, void (*pfunc)(void));
+void rtos_addThreadToReadyList(rtos_thread_t * pthread);
 /** @} */ // End of RTOS_Thread_Functions group
 
 #ifdef __cplusplus
