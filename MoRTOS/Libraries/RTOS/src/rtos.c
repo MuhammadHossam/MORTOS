@@ -133,7 +133,7 @@ static volatile uint32_t sysTickCounter = 0;
  *
  * @post The RTOS scheduler is started and ready to schedule threads.
  */
- void rtos_start_scheduler(void){
+ void rtos_schedulerStart(void){
     
  }
  
@@ -157,7 +157,7 @@ void rtos_svc_handler_main(uint32_t *svc_args){
          rtos_threadCreate((rtos_thread_t *) svc_args[0], (rtos_stack_t *) svc_args[1], (uint32_t) svc_args[2], (void (*)(void)) svc_args[3]);
          break;
       case RTOS_START_SCHEDULER:
-         rtos_start_scheduler();
+    	  rtos_schedulerStart();
          break;
       default:
          ASSERT(0); // Invalid SVC call

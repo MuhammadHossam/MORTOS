@@ -189,6 +189,15 @@ rtos_thread_t * rtos_threadGetNext(void) {
 }
 
 
+/**
+ * @brief Adds a thread to the ready list.
+ *
+ * This function adds a created thread to the ready list based on its priority.
+ * If the added thread has a higher priority than the current running thread, a
+ * context switch is triggered by setting the PendSV exception.
+ *
+ * @param pthread Pointer to the thread structure to be added.
+ */
 void rtos_addThreadToReadyList(rtos_thread_t * pthread)
 {
     ASSERT(pthread != NULL);
