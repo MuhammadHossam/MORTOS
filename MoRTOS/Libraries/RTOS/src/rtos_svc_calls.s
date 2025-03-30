@@ -4,6 +4,7 @@
 
 
 .global rtos_svc_threadCreate
+.global rtos_svc_schedulerStart
 
 .text 
 

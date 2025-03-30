@@ -25,8 +25,9 @@
 rtos_thread_t thread1;
 rtos_stack_t stack1;
 void threadmain1(void){
-	uint32_t i = 0;
-	i++;
+	while(1){
+
+	}
 }
 
 int main(void)
@@ -35,6 +36,8 @@ int main(void)
 	rtos_init();
 	/* Configure and enable SysTick interrupts */
 	rtos_svc_threadCreate(&thread1, &stack1, 1, threadmain1);
+	/* Start the RTOS scheduling*/
+	rtos_svc_schedulerStart();
 	/* Loop forever */
 	while(1){}
 }

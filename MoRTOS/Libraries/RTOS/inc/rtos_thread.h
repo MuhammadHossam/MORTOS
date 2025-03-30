@@ -89,6 +89,9 @@ void rtos_threadCreate(rtos_thread_t * pthread, rtos_stack_t * pstack, uint32_t 
 rtos_thread_t * rtos_threadGetNext(void);
 void rtos_svc_threadCreate(rtos_thread_t * pthread, rtos_stack_t * pstack, uint32_t priority, void (*pfunc)(void));
 void rtos_addThreadToReadyList(rtos_thread_t * pthread);
+rtos_thread_t * rtos_RunningThreadGet(void);
+void rtos_threadSwitchingRunning(void);
+
 /** @} */ // End of RTOS_Thread_Functions group
 
 #ifdef __cplusplus

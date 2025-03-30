@@ -215,4 +215,46 @@ void rtos_addThreadToReadyList(rtos_thread_t * pthread)
         /*Context switching isn't needed*/
     }
 }
+
+
+/**
+ * @brief Switches to the next thread in the ready list.
+ *
+ * This function retrieves the head of the highest priority ready list and
+ * assigns it to the running thread. It then assigns the highest priority
+ * thread id to the current running thread id.
+ */
+void rtos_threadSwitchingRunning(void){
+
+    /*Get the highest priority list*/
+    rtos_list_t * pReadylist = &readylist[currentTopPriority];
+
+    /*Move the head to the next list item since always
+        head is pointing to the last added list item 
+        and we need to point to the first added one in the list*/
+    pReadylist->pHead = pReadylist->pHead->pNext;
+    if(pReadylist->pHead == (rtos_listItem_t*)&pReadylist->end)
+    {
+        /*Points to the first added thread in the list.*/
+        pReadylist->pHead = pReadylist->pHead->pNext;
+    }
+
+    /*Get the running thread with the highest current priority*/
+    pRunningThread = (rtos_thread_t *)pReadylist->pHead->pThread;
+
+    /*Assign the highest priority thread id to the current running thread id*/
+    RunningThreadId = pRunningThread->threadId;
+}
+
+
+/**
+ * @brief Retrieves the currently running thread.
+ *
+ * This function returns a pointer to the currently running thread control block.
+ *
+ * @return Pointer to the currently running thread control block.
+ */
+rtos_thread_t * rtos_RunningThreadGet(void){
+    return (rtos_thread_t*)pRunningThread;
+}
  /** @} */

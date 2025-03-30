@@ -54,15 +54,22 @@
 /** @brief Exception return value. 
  *  @note This value is used to return to the thread mode using the PSP.
 */
-uint32_t exc_return_temp = 0u;
+uint32_t svcEXEReturn = 0u;
 static volatile uint32_t sysTickCounter = 0;
+static rtos_thread_t idlethread;
+static rtos_stack_t idleStack;
+
  /** @} */ // End of RTOS_Private_Variables
 
 /** @defgroup RTOS_Private_Functions Private Functions
  *  @brief Private functions used internally by the RTOS.
  *  @{
  */
+void idletreadMain(void){
+   while(1){
 
+   }
+}
  /** @} */ // End of RTOS_Private_Functions
 
 /** @defgroup RTOS_Private_Implementations Private Implementations
@@ -134,7 +141,36 @@ static volatile uint32_t sysTickCounter = 0;
  * @post The RTOS scheduler is started and ready to schedule threads.
  */
  void rtos_schedulerStart(void){
-    
+   
+   /*Create the idle task.*/
+   rtos_threadCreate(&idlethread, &idleStack
+                        , (THREAD_PRIORITY_LEVELS - 1)
+                        , idletreadMain);
+   
+   /*Update the running thread with the highest priority ready thread*/
+   rtos_threadSwitchingRunning();
+
+   /*Get the current running thread*/
+   rtos_thread_t * pRunningThreadLoc = (rtos_thread_t *)rtos_RunningThreadGet();
+
+   /*Update the SVC interrupt exception return with the task exception return*/
+   svcEXEReturn = MEM32_ADDRESS(pRunningThreadLoc->pStack);
+
+   /*Set the PSP to the task stack pointer pointing to the R0 (beginning of stack frame)*/
+   __set_PSP((uint32_t)(pRunningThreadLoc->pStack + 10*4));
+
+   /*Initialize the control register value to unprivilege mode, using PSP, No FPU*/
+   __set_CONTROL(MEM32_ADDRESS((uint32_t)(pRunningThreadLoc->pStack + 0x04u)));
+   
+   /*Run ISB instruction (Instruction synchronization barrier 
+   * to flush the pipeline in the processor)*/
+   __ISB();
+
+   /*Initialize the systick counter to zero*/
+   sysTickCounter = 0;
+
+   /*Un-mask all interrupts*/
+   __set_BASEPRI(0);
  }
  
 /**
