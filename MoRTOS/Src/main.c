@@ -24,18 +24,28 @@
 
 rtos_thread_t thread1;
 rtos_stack_t stack1;
+rtos_thread_t thread2;
+rtos_stack_t stack2;
+
 void threadmain1(void){
 	while(1){
 
 	}
 }
 
+void threadmain2(void){
+	while(1){
+
+	}
+
+}
 int main(void)
 {
 	/* Initialize the RTOS */
 	rtos_init();
 	/* Configure and enable SysTick interrupts */
 	rtos_svc_threadCreate(&thread1, &stack1, 1, threadmain1);
+	rtos_svc_threadCreate(&thread2, &stack2, 1, threadmain2);
 	/* Start the RTOS scheduling*/
 	rtos_svc_schedulerStart();
 	/* Loop forever */
