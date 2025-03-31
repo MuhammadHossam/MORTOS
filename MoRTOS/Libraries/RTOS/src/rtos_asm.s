@@ -36,4 +36,20 @@ RTOS_PendSV_Handler:
     bl rtos_RunningThreadGet            /* Return the current running thread and it's pointing to the thread stack pointer.*/
     str r1, [r0]                        /* Store the r1 (contains the current stack pointer value) to return of the function (thread stack pointer)*/
     
+    /*load the context of the new running task*/
+    mov r1, #1 							/* Load r1 with #1*/
+	msr basepri, r1						/* Mask all interrupts with priority equals to or higher than #1*/
+	bl rtos_threadSwitchingRunning		/* Run the thread switching routine.*/
+	mov r1, #0							/* Load r1 with #0*/
+	msr basepri, r1						/* Mask all interrupts with priority equals to or higher than #0*/
+	bl rtos_RunningThreadGet            /* Return the current running thread and it's pointing to the thread stack pointer.*/
+	ldr r1, [r0]						/* Load r1 with the address content of r0 which is the current thread stack pointer*/
+	ldmia r1!, {r2-r11}					/* Load the stack frame to r2-r11 and it will be then pointing to the r0*/
+	mov lr, r2							/* Store the content of r2 (EXEC_RETURN) to the link register*/
+	msr control, r3						/* Store content of r3 to the control register*/
+	isb									/* Instruction synchronization barrier and CPU cache flushing.*/
+	tst lr, #0x10						/* Check the FPU to save them if needed*/
+	it eq
+	vldmiaeq r1!, {s16-s31}				/* Restore the FPU registers in case of the task was using the FPU*/
+	msr psp, r1							/* Update the psp with the content of r1 which is the stack address pointing to r0 (beginning of ISR stack frame)*/
     bx lr /*return back*/
