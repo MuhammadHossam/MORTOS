@@ -23,6 +23,7 @@
  #include "rtos_thread.h"
  #include "rtos_cfg.h"
  #include "stm32f446xx.h"
+ #include "rtos_mutex.h"
 /** @} */ // End of RTOS_Includes
 
 /** @defgroup RTOS_Typedefs Typedefs
@@ -195,6 +196,8 @@ void rtos_svc_handler_main(uint32_t *svc_args){
       case RTOS_START_SCHEDULER:
     	  rtos_schedulerStart();
          break;
+      case RTOS_MUTEX_CREATE:
+         rtos_mutexCreate((rtos_mutex_t*)svc_args[0], (uint32_t)svc_args[1]);
       default:
          ASSERT(0); // Invalid SVC call
          break;

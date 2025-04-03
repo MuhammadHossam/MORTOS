@@ -5,6 +5,7 @@
 
 .global rtos_svc_threadCreate
 .global rtos_svc_schedulerStart
+.global rtos_svc_mutexCreate
 
 .text 
 
@@ -17,4 +18,10 @@ rtos_svc_threadCreate:
 .type rtos_svc_schedulerStart, %function
 rtos_svc_schedulerStart:
     svc 0
+    bx lr /*return back*/
+
+
+.type rtos_svc_mutexCreate, %function
+rtos_svc_mutexCreate:
+    svc 2
     bx lr /*return back*/

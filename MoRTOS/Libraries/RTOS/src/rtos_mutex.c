@@ -8,7 +8,8 @@
 
 // -----------------------------------------------------------------------------
 // Includes
-
+#include "rtos_cfg.h"
+#include "rtos_mutex.h"
 // -----------------------------------------------------------------------------
 // Private Typedefs
 // -----------------------------------------------------------------------------
@@ -78,6 +79,21 @@
  * @brief Implementations of RTOS mutex functions.
  * @{
  */
+void rtos_mutexCreate(rtos_mutex_t *pMutex, uint32_t mutexinitval){
+    
+    /*Ensure that pMutex isn't pointing to a null mutex structure*/
+    ASSERT(pMutex != NULL); 
 
+    /*Ensure that mutex initial value whether 0 or 1 */
+    ASSERT( (mutexinitval == 0u) || (mutexinitval == 1u));
+
+    /*Assign the mutex initial value*/
+    pMutex->value = mutexinitval;
+
+    /*Initialize the mutex waiting list*/
+    rtos_listInit((rtos_list_t *)&pMutex->waitinglist);
+
+
+}
 
 /** @} */

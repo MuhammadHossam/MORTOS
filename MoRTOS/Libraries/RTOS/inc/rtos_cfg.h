@@ -50,6 +50,7 @@ extern "C" {
 /** @brief RTOS commands */
 #define RTOS_START_SCHEDULER   0x00  /**< Start the RTOS scheduler */
 #define RTOS_CREATE_TASK       0x01  /**< Create a new task */
+#define RTOS_MUTEX_CREATE      0x02  /**< Create a new mutex */
 
 /**
  * @}

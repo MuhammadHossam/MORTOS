@@ -19,6 +19,7 @@
 #define RTOS_MUTEX_H
 
 // Includes
+#include "rtos_list.h"
 #include <stdint.h>
 
 /**
@@ -50,6 +51,10 @@
  * @brief Typedefs used in RTOS mutex management.
  * @{
  */
+typedef struct {
+  uint32_t value;          /*The mutex value*/
+  rtos_list_t waitinglist; /*The waiting list for this mutex */
+} rtos_mutex_t;
 
 /** @} */ // End of RTOS_Mutex_exported_Typedefs group
 
@@ -66,7 +71,8 @@
  * @brief Function prototypes for RTOS mutex management.
  * @{
  */
-
+void rtos_svc_mutexCreate(rtos_mutex_t *pMutex, uint32_t mutexinitval);
+void rtos_mutexCreate(rtos_mutex_t *pMutex, uint32_t mutexinitval);
 /** @} */ // End of RTOS_Mutex_exported_Functions group
 
 #endif // RTOS_MUTEX_H
