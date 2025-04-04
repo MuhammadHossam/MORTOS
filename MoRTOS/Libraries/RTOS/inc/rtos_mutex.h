@@ -73,6 +73,8 @@ typedef struct {
  */
 void rtos_svc_mutexCreate(rtos_mutex_t *pMutex, uint32_t mutexinitval);
 void rtos_mutexCreate(rtos_mutex_t *pMutex, uint32_t mutexinitval);
+uint32_t rtos_svc_mutexLock(rtos_mutex_t *pMutex, uint32_t waitstatus);
+uint32_t rtos_mutexLock(rtos_mutex_t *pMutex, uint32_t waitstatus);
 /** @} */ // End of RTOS_Mutex_exported_Functions group
 
 #endif // RTOS_MUTEX_H

@@ -180,6 +180,18 @@ void idletreadMain(void){
  * This function is the entry point for all SVC calls. It is responsible for
  * handling the SVC calls and calling the appropriate functions.
  *
+ * @note    svc_args is a pointer to the argument array passed to the SVC
+ *          instruction (through the svc request function). 
+ *          The array contains the following:
+ *          [0] = R0
+ *          [1] = R1
+ *          [2] = R2
+ *          [3] = R3
+ *          [4] = R12
+ *          [5] = R14 (LR)
+ *          [6] = PC
+ *          [7] = xPSR
+ * 
  * @param svc_args The arguments passed to the SVC call.
  *
  * @pre The function must be called through an SVC call.
@@ -187,8 +199,11 @@ void idletreadMain(void){
  * @post The appropriate function is called based on the SVC number.
  */
 void rtos_svc_handler_main(uint32_t *svc_args){
+
    uint8_t svc_number = ((uint8_t *) svc_args[6])[-2];
 
+   uint32_t returnstatus;
+   
    switch(svc_number){
       case RTOS_CREATE_TASK:
          rtos_threadCreate((rtos_thread_t *) svc_args[0], (rtos_stack_t *) svc_args[1], (uint32_t) svc_args[2], (void (*)(void)) svc_args[3]);
@@ -198,8 +213,34 @@ void rtos_svc_handler_main(uint32_t *svc_args){
          break;
       case RTOS_MUTEX_CREATE:
          rtos_mutexCreate((rtos_mutex_t*)svc_args[0], (uint32_t)svc_args[1]);
+         break;
+      case RTOS_MUTEX_LOCK:
+         returnstatus = rtos_mutexLock((rtos_mutex_t*)svc_args[0], (uint32_t)svc_args[1]);
+         break;
       default:
          ASSERT(0); // Invalid SVC call
+         break;
+   }
+
+   switch(svc_number)
+   {
+      case RTOS_MUTEX_LOCK:
+         if(returnstatus == 2)
+         {
+            /*Decrement the PC by 2 bytes pointing to 
+             * svc 3 instruction instead of bx lr 
+             * to execute again the locking request by the blocked thread*/
+            svc_args[6] = svc_args[6] - 2;
+         }
+         else
+         {
+            /*Assign the returnstatus to the R0 address in stack frame 
+             * to be returned back by the caller function*
+             * In case of retry is needed, no need to return the status back*/
+            svc_args[0] = returnstatus;
+         }
+         break;
+      default:
          break;
    }
 }
