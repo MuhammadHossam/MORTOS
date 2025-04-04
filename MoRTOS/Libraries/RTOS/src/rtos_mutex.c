@@ -168,8 +168,11 @@ uint32_t rtos_mutexLock(rtos_mutex_t *pMutex, uint32_t waitstatus)
     /*Mutex locking retry is needed till successful acquire*/
     if( (returnstatus != 1) && (waitstatus == 1))
     {
+        /*Remove the running thread item from the running list.*/
+        rtos_listRemove(&pRunningthread->item);
+        
         /*Push the current running thread to the mutex waiting list*/
-        rtos_SortedlistInsert((rtos_list_t *)&pMutex->waitinglist, (rtos_listItem_t *)pRunningthread);
+        rtos_SortedlistInsert((rtos_list_t *)&pMutex->waitinglist, (rtos_listItem_t *)&pRunningthread->item);
 
         /*Immediate context switching should be triggered after return from the SVC*/
         SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk; // Set the PendSV exception

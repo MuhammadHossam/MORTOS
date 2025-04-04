@@ -30,7 +30,7 @@ rtos_stack_t stack2;
 rtos_mutex_t mutex1;
 
 void threadmain1(void){
-	rtos_svc_mutexLock(&mutex1,0u);
+	rtos_svc_mutexLock(&mutex1,1u);
 	while(1){
 
 	}
