@@ -59,6 +59,7 @@ struct listItem_t {
   struct listItem_t *pPrev; /**< Pointer to the previous list item. */
   void *pThread; /**< Pointer to the thread associated with the list item. */
   void *pList;   /**< Pointer to the list containing the list item. */
+  uint32_t itemPriority; /**< The item list priority used for waiting list sorting */
 };
 
 typedef struct listItem_t rtos_listItem_t;
@@ -97,6 +98,7 @@ typedef struct {
 void rtos_listInit(rtos_list_t *pList);
 void rtos_listInsert(rtos_list_t *pList, rtos_listItem_t *pNewItem);
 void rtos_listRemove(rtos_listItem_t *pRemovedItem);
+void rtos_SortedlistInsert(rtos_list_t *pList, rtos_listItem_t *pNewItem);
 /** @} */ // End of RTOS_List_exported_Functions group
 
 #endif // RTOS_LIST_H

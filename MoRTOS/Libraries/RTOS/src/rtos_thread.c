@@ -170,6 +170,9 @@ void rtos_threadCreate(rtos_thread_t * pthread, rtos_stack_t * pstack, uint32_t 
     /*Increment the total number of threads and assign it to the thread id indicating the creation order*/
     pthread->threadId = ++numOfThreads; 
 
+    /*Initialize the item priority with the thread priority*/
+    pthread->item.itemPriority = priority;
+
     rtos_addThreadToReadyList(pthread); // Add the thread to the ready list 
 }
 

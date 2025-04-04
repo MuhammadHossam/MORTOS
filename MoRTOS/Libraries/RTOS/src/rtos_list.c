@@ -148,4 +148,46 @@ void rtos_listRemove(rtos_listItem_t *pRemovedItem) {
     pRemovedItem->pNext = NULL; /* Set the next pointer of the removed item to NULL */
     pRemovedItem->pPrev = NULL; /* Set the previous pointer of the removed item to NULL */
 }
+
+
+
+
+/**
+ * @brief Insert an item into the list in priority ascending order.
+ *
+ * Inserts a new item into the list according to it's priority in ascending
+ * order from the higher priority (lower value) to the lower priority (higher value)
+ *
+ * @param pList Pointer to the list where the item will be inserted.
+ * @param pNewItem Pointer to the new list item to be inserted.
+ */
+void rtos_SortedlistInsert(rtos_list_t *pList, rtos_listItem_t *pNewItem)
+{
+    ASSERT(pList != NULL);
+
+    ASSERT(pNewItem != NULL);
+    
+    /*Create a temp item to traverse along the list*/
+    rtos_listItem_t * pTempItem = (rtos_listItem_t*) &pList->end;
+
+    /*Traverse along the list to find the right place fitting the item priority*/
+    while((pTempItem->pNext != (rtos_listItem_t *)&pList->end) 
+        && (pTempItem->pNext->itemPriority < pNewItem->itemPriority))
+    {
+        pTempItem = pTempItem->pNext;
+    }
+
+    /*Insert the item in the list*/
+    pNewItem->pNext = pTempItem->pNext;
+    pNewItem->pPrev = pTempItem;
+    pTempItem->pNext->pPrev = pNewItem;
+    pTempItem->pNext = pNewItem;
+    
+    /*Point the item list pointer to the already added list*/
+    pNewItem->pList = (void *)pList;
+
+    /*Increment the list number of items.*/
+    pList->numofItems++;
+
+}
 /** @} */
