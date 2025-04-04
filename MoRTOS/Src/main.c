@@ -21,13 +21,16 @@
 #include "rtos_list.h"
 #include "rtos_thread.h"
 #include "rtos.h"
+#include "rtos_mutex.h"
 
 rtos_thread_t thread1;
 rtos_stack_t stack1;
 rtos_thread_t thread2;
 rtos_stack_t stack2;
+rtos_mutex_t mutex1;
 
 void threadmain1(void){
+	rtos_svc_mutexLock(&mutex1,0u);
 	while(1){
 
 	}
@@ -43,9 +46,11 @@ int main(void)
 {
 	/* Initialize the RTOS */
 	rtos_init();
-	/* Configure and enable SysTick interrupts */
+	/*Create threads*/
 	rtos_svc_threadCreate(&thread1, &stack1, 1, threadmain1);
 	rtos_svc_threadCreate(&thread2, &stack2, 1, threadmain2);
+	/*Create mutex with released initial value*/
+	rtos_svc_mutexCreate(&mutex1, 1u);
 	/* Start the RTOS scheduling*/
 	rtos_svc_schedulerStart();
 	/* Loop forever */
